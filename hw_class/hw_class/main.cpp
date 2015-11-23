@@ -31,9 +31,9 @@ public:
 			str = nullptr;
 		}
 	}
-	void Assign(char*);
-	void Concat(char*);
-	void Addsymbol(char, int);
+	void Assign(const char*);
+	void Concat(const char*);
+	void Addsymbol(const char,const int);
 	void Ansicode();
 	char* Upperstr()
 	{
@@ -78,7 +78,7 @@ int main()
 
 	return 0;
 }
-void String::Assign(char*s)
+void String::Assign(const char*s)
 {
 	if (s && *s)
 	{
@@ -89,7 +89,7 @@ void String::Assign(char*s)
 	}
 
 }
-void String::Concat(char*s)
+void String::Concat(const char*s)
 {
 	if (s && *s)
 	{
@@ -103,7 +103,7 @@ void String::Concat(char*s)
 
 
 }
-void String::Addsymbol(char c, int pos)
+void String::Addsymbol(const char c, const int pos)
 {
 	if (c)
 	{
