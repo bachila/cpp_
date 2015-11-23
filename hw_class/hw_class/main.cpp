@@ -7,7 +7,7 @@ class String
 	char* str = nullptr;
 	unsigned size = 0;
 public:
-	String(char*s) : str("Unknown")
+	String(char* s)
 	{
 		if (s && *s)
 		{
@@ -15,7 +15,22 @@ public:
 			str = new char[size];
 			strcpy_s(str, size, s);
 		}
-	};
+		else
+		{
+			size = strlen("Unknown") + 1;
+			str = new char[size];
+			strcpy_s(str, size, "Unknown");
+		}
+
+	}
+	~String()
+	{
+		if (str)
+		{
+			delete[] str;
+			str = nullptr;
+		}
+	}
 	void Assign(char*);
 	void Concat(char*);
 	void Addsymbol(char, int);
@@ -31,11 +46,11 @@ public:
 		return str;
 	}
 
-	char* get_str()
+	const char* get_str()
 	{
 		return str;
 	}
-	int get_size()
+	const int get_size()
 	{
 		return size;
 	}
