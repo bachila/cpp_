@@ -7,7 +7,7 @@ class String
 	char* str = nullptr;
 	unsigned size = 0;
 public:
-	String(char* s)
+	String(const char* s)
 	{
 		if (s && *s)
 		{
@@ -59,7 +59,7 @@ public:
 
 int main()
 {
-	String s1("hi");
+	String s1("");
 	cout << s1.get_str() << endl;
 	cout << s1.get_size() << endl;
 	s1.Assign("Hello");
@@ -75,6 +75,7 @@ int main()
 	cout << s1.Upperstr() << endl;
 	cout << s1.Lowerstr() << endl;
 	system("pause");
+
 	return 0;
 }
 void String::Assign(char*s)
@@ -93,7 +94,7 @@ void String::Concat(char*s)
 	if (s && *s)
 	{
 		size += strlen(s);
-		char * newstr = new char[size];
+		char* newstr = new char[size];
 		strcpy_s(newstr, size, str);
 		strcat_s(newstr, size, s);
 		delete[] str;
