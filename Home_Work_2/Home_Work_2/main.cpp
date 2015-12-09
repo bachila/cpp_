@@ -5,10 +5,10 @@ using namespace std;
 
 class Student  //Unique resource
 {
-	unsigned average;
-	unsigned group;
-	char* name;
-	int sizename;
+	unsigned average = 0;
+	unsigned group = 0;
+	char* name = nullptr;
+	int sizename = 0;
 public:
 	Student(Student&) = delete;
 	void operator= (const Student&) = delete;
@@ -48,10 +48,10 @@ public:
 
 class Car // Transfer
 {
-	mutable unsigned age;
-	mutable unsigned price;
-	mutable unsigned size;
-	mutable char* name;
+	unsigned age = 0;
+	unsigned price = 0;
+	unsigned size = 0;
+	char* name = nullptr;
 public:
 	Car() : age(0), price(0), size(0), name(nullptr)
 	{ }
@@ -93,7 +93,7 @@ public:
 		return Noresurse;
 	}
 
-	Car(const Car& oldcar)
+	Car(Car& oldcar)
 	{
 			if (oldcar.name)
 			{
@@ -117,10 +117,10 @@ public:
 
 class Phone //co-ownership
 {
-	char* name;
-	unsigned price;
-	unsigned size;
-	unsigned* count;
+	char* name = nullptr;
+	unsigned price = 0;
+	unsigned size = 0;
+	unsigned* count = 0;
 
 public:
 	Phone() : name(nullptr), price(0), size(0), count(nullptr)
@@ -179,7 +179,7 @@ public:
 
 }; //End co-ownership
 template <typename T>
-void WorkClass(T workclass, T workclass2);
+void WorkClass(T* workclass, T* workclass2);
 int main()
 {
 	unsigned userNum;
@@ -223,14 +223,14 @@ int main()
 		{
 			Car Bmw(2015, 20000, "725");
 			Car Bmw2;
-			WorkClass(Bmw, Bmw2); // copy constructor
+			WorkClass(&Bmw, &Bmw2);
 		}
 			break;
 		case 3:
 		{
 			Phone Samsung("Galaxy", 500);
 			Phone Samsung2;
-			WorkClass(Samsung,Samsung2); // copy constructor
+			WorkClass(&Samsung, &Samsung2);
 		}
 			break;
 		default:
@@ -243,7 +243,7 @@ int main()
 }
 
 template <typename T>
-void WorkClass(T workclass, T workclass2)
+void WorkClass(T* workclass, T* workclass2)
 {
 	unsigned option;
 	while (true)
@@ -255,12 +255,12 @@ void WorkClass(T workclass, T workclass2)
 		switch (option)
 		{
 		case 1:
-			cout << "Name: " << workclass.get_name() << endl << endl;
+			cout << "Name: " << workclass->get_name() << endl << endl;
 			break;
 		case 2:
-			if (workclass.get_name() != Noresurse)
+			if (workclass->get_name() != Noresurse)
 			{
-				if (workclass2 = workclass)
+				if (*workclass2 = *workclass)
 					cout << "copy is created" << endl << endl;
 				else
 					cout << "copy was created" << endl << endl;
@@ -270,7 +270,7 @@ void WorkClass(T workclass, T workclass2)
 				cout << "copy was created" << endl << endl;
 			break;
 		case 3:
-			cout << "Name: " << workclass2.get_name() << endl << endl;
+			cout << "Name: " << workclass2->get_name() << endl << endl;
 			break;
 		default:
 			cout << "incorrect value" << endl << endl;
