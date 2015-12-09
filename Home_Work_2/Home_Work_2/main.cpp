@@ -13,7 +13,10 @@ public:
 	Student(Student&) = delete;
 	void operator= (const Student&) = delete;
 
-	Student(unsigned average_, unsigned group_, char* name_)
+	Student() : average(0), group(0), name(nullptr), sizename(0)
+	{ }
+	
+	Student(unsigned average_, unsigned group_, char* name_) : Student()
 	{
 		if (name_ && *name_)
 		{
@@ -23,21 +26,14 @@ public:
 			name = new char[sizename];
 			strcpy_s(name, sizename, name_);
 		}
-		else
-		{
-			average = 0;
-			group = 0;
-			sizename = strlen("Unknown") + 1;
-			name = "Unknown";
-		}
-	};
+	}
 
 	~Student()
 	{
 		if (name)
 			delete[] name;
 		name = nullptr;
-	};
+	}
 
 	const char* get_name() const
 	{
@@ -46,18 +42,20 @@ public:
 			return name;
 		}
 		return Noresurse;
-	};
+	}
 }; // End unique resource
 
 
 class Car // Transfer
 {
-	unsigned age;
-	unsigned price;
-	unsigned size;
-	char* name;
+	mutable unsigned age;
+	mutable unsigned price;
+	mutable unsigned size;
+	mutable char* name;
 public:
-	Car() {};
+	Car() : age(0), price(0), size(0), name(nullptr)
+	{ }
+
 	Car(unsigned age_, unsigned price_, char* name_) : age(0), price(0), name(nullptr)
 	{
 		if (name_ && *name_)
@@ -68,10 +66,9 @@ public:
 		name = new char(size);
 		strcpy_s(name, size, name_);
 		}	
+	}
 
-	};
-
-	const void operator= (Car oldcar)
+	bool operator= (Car& oldcar)
 	{
 			if (oldcar.name)
 			{
@@ -80,11 +77,12 @@ public:
 				size = oldcar.size;
 				name = new char[size];
 				strcpy_s(name, size, oldcar.name);
-				oldcar.age = oldcar.size = oldcar.price = NULL;
+				oldcar.age = oldcar.size = oldcar.price = 0;
 				oldcar.name = nullptr;
+				return 1;
 			}
-	};
-
+			return 0;
+	}
 
 	const char* get_name() const
 	{
@@ -93,9 +91,9 @@ public:
 			return name;
 		}
 		return Noresurse;
-	};
+	}
 
-	Car(Car& oldcar)
+	Car(const Car& oldcar)
 	{
 			if (oldcar.name)
 			{
@@ -104,30 +102,31 @@ public:
 				size = oldcar.size;
 				name = new char[size];
 				strcpy_s(name, size, oldcar.name);
-				oldcar.age = oldcar.size = oldcar.price = NULL;
+				oldcar.age = oldcar.size = oldcar.price = 0;
 				oldcar.name = nullptr;
 			}
-	};
+	}
 
 	~Car() 
 	{
 		if (name && *name)
 			delete[] name;
 		name = nullptr;
-	};
+	}
 }; // End transfer
 
 class Phone //co-ownership
 {
-	char* name = nullptr;
+	char* name;
 	unsigned price;
 	unsigned size;
-	unsigned* count = nullptr;
+	unsigned* count;
 
 public:
-	Phone() 
-	{ };
-	Phone(char* name_, unsigned price_) : size(strlen(name_) + 1), price(price_)
+	Phone() : name(nullptr), price(0), size(0), count(nullptr)
+	{ }
+
+	Phone(char* name_, unsigned price_) : size(strlen(name_) + 1), price(price_), count(nullptr)
 	{
 		if (name_ && *name_)
 		{
@@ -135,7 +134,7 @@ public:
 			strcpy_s(name, size, name_);
 			count = new unsigned(1);
 		}
-	};
+	}
 
 	~Phone()
 	{
@@ -143,7 +142,7 @@ public:
 		if (*count == 0 && name)
 			delete[] name;
 		name = nullptr;
-	};
+	}
 
 	Phone(Phone& oldphone) : price(oldphone.price), size(oldphone.size)
 	{
@@ -153,22 +152,21 @@ public:
 			++(*count);
 			name = oldphone.name;
 		}
-	};
+	}
 	
-	void operator= (Phone oldphone)
+	bool operator= (const Phone& oldphone)
 	{
+		if (this->get_name() != oldphone.get_name())
+		{
 			count = oldphone.count;
 			++(*count);
 			price = oldphone.price;
 			size = oldphone.size;
-			if (oldphone.name)
-			{
-				name = new char[size];
-				strcpy_s(name, size, oldphone.name);
-			}
-			else
-				name = "";
-	};
+			name = oldphone.name;
+			return 1;
+		}
+		return 0;
+	}
 	
 	const char* get_name() const
 	{
@@ -177,15 +175,13 @@ public:
 		else
 			return Noresurse;
 
-	};
+	}
 
 }; //End co-ownership
 template <typename T>
-void WorkClass(T* workclass, T* workclass2);
+void WorkClass(T workclass, T workclass2);
 int main()
 {
-	setlocale(LC_ALL, "Russian");
-
 	unsigned userNum;
 	unsigned option;
 	do
@@ -201,23 +197,23 @@ int main()
 			Student Nick(5, 3, "Nick");
 			while (true)
 			{
-				cout << "1)Output value\n2)Create copy class\n3)Output copy value\n0)Exit\nYour choice: ";
+				cout << "1)Output value\n2)Create copy class\n3)Output copy value\n0)Exit to previous menu\nYour choice: ";
 				cin >> option;
 				if (option == 0)
 					break;
 				switch (option)
 				{
 				case 1:
-					cout << Nick.get_name() << endl;
+					cout << "Student name: " <<  Nick.get_name() << endl << endl;
 					break;
 				case 2:
-					cout << "You can not create a copy\n";
+					cout << "You can not create a copy" << endl << endl;
 					break;
 				case 3:
-					cout << "You can not output a copy\n";
+					cout << "You can not output a copy" << endl << endl;
 					break;
 				default:
-					cout << "incorrect value" << endl;
+					cout << "incorrect value" << endl << endl;
 					break;
 				}
 			}
@@ -227,18 +223,18 @@ int main()
 		{
 			Car Bmw(2015, 20000, "725");
 			Car Bmw2;
-			WorkClass(&Bmw, &Bmw2);
+			WorkClass(Bmw, Bmw2); // copy constructor
 		}
 			break;
 		case 3:
 		{
 			Phone Samsung("Galaxy", 500);
 			Phone Samsung2;
-			WorkClass(&Samsung, &Samsung2);
+			WorkClass(Samsung,Samsung2); // copy constructor
 		}
-
+			break;
 		default:
-			cout << "incorrect value" << endl;
+			cout << "incorrect value" << endl << endl;
 			break;
 		}
 	} while (true);
@@ -247,33 +243,37 @@ int main()
 }
 
 template <typename T>
-void WorkClass(T* workclass, T* workclass2)
+void WorkClass(T workclass, T workclass2)
 {
 	unsigned option;
 	while (true)
 	{
-		cout << "1)Output value\n2)Create copy class\n3)Output copy value\n0)Exit\nYour choice: ";
+		cout << "1)Output value\n2)Create copy class\n3)Output copy value\n0)Exit to previous menu\nYour choice: ";
 		cin >> option;
 		if (option == 0)
 			break;
 		switch (option)
 		{
 		case 1:
-			cout << workclass->get_name() << endl;
+			cout << "Name: " << workclass.get_name() << endl << endl;
 			break;
 		case 2:
-			if (workclass->get_name() != Noresurse)
+			if (workclass.get_name() != Noresurse)
 			{
-				*workclass2 = *workclass;
-				cout << "copy is created" << endl;
+				if (workclass2 = workclass)
+					cout << "copy is created" << endl << endl;
+				else
+					cout << "copy was created" << endl << endl;
+				
 			}
 			else 
-				cout << "copy was created" << endl;
+				cout << "copy was created" << endl << endl;
 			break;
 		case 3:
-			cout << workclass2->get_name() << endl;
+			cout << "Name: " << workclass2.get_name() << endl << endl;
+			break;
 		default:
-			cout << "incorrect value" << endl;
+			cout << "incorrect value" << endl << endl;
 			break;
 		}
 	}
