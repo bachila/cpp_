@@ -70,6 +70,8 @@ public:
 
 	bool operator= (Car& oldcar)
 	{
+		if (this != &oldcar)
+		{
 			if (oldcar.name)
 			{
 				age = oldcar.age;
@@ -81,7 +83,8 @@ public:
 				oldcar.name = nullptr;
 				return 1;
 			}
-			return 0;
+		}
+		return 0;
 	}
 
 	const char* get_name() const
@@ -95,6 +98,8 @@ public:
 
 	Car(Car& oldcar)
 	{
+		if (this != &oldcar)
+		{
 			if (oldcar.name)
 			{
 				age = oldcar.age;
@@ -105,6 +110,7 @@ public:
 				oldcar.age = oldcar.size = oldcar.price = 0;
 				oldcar.name = nullptr;
 			}
+		}	
 	}
 
 	~Car() 
@@ -156,14 +162,17 @@ public:
 	
 	bool operator= (const Phone& oldphone)
 	{
-		if (this->get_name() != oldphone.get_name())
+		if (this != &oldphone)
 		{
-			count = oldphone.count;
-			++(*count);
-			price = oldphone.price;
-			size = oldphone.size;
-			name = oldphone.name;
-			return 1;
+			if (this->get_name() != oldphone.get_name())
+			{
+				count = oldphone.count;
+				++(*count);
+				price = oldphone.price;
+				size = oldphone.size;
+				name = oldphone.name;
+				return 1;
+			}
 		}
 		return 0;
 	}
