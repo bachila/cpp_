@@ -3,7 +3,8 @@
 using namespace std;
 
 /*
-Написать класс для эффективной работы со строками, позволяющий форматировать и сравнивать строки, хранить в строках числовые значения и извлекать их. Для этого необходимо реализовать:
+Написать класс для эффективной работы со строками, позволяющий форматировать и сравнивать строки,
+хранить в строках числовые значения и извлекать их. Для этого необходимо реализовать:
 • перегруженные операции присваивания и конкатенации; -
 • ввод/вывод строки;
 • операции сравнения и приведения типов;
@@ -11,7 +12,8 @@ using namespace std;
 • поиска символов и подстрок.
 • обращение к элементам строки по индексу.
 Весь функционал должен быть реализован в соответствии с хорошими практиками и необходимыми проверками.
-Написать программу, демонстрирующую работу с этим классом. Программа должна содержать меню, позволяющее осуществить проверку всех методов класса.
+Написать программу, демонстрирующую работу с этим классом. Программа должна содержать меню,
+позволяющее осуществить проверку всех методов класса.
 */
 
 class String
@@ -152,8 +154,8 @@ public:
 		if (p)
 		{
 			startIndex = p - str;
-			cout << "substring " << substring << " are in line" << endl;
-			cout << "substring " << substring << " start index = " << startIndex << endl;
+			cout << "substring \"" << substring << "\" are in line" << endl;
+			cout << "substring \"" << substring << "\" start index = " << startIndex << endl;
 		}
 		else
 			cout << "substring " << substring << " is not in line" << endl;
@@ -192,17 +194,22 @@ int main()
 	setlocale(LC_ALL, "");
 
 	unsigned userNum;
-	unsigned sizeString = 3;
+	unsigned sizeString;
+	do
+	{
+		cout << "Введите размер массива строк" << endl;
+		cin >> sizeString;
+	} while (!sizeString);
 	String* str = new String[sizeString];
 	cout << "Введите значения для строк" << endl;
 	for (unsigned i = 0; i < sizeString; i++)
 	{
-		cout << "Введите значение для " << i << " строки ";
+		cout << "Введите значение для " << i + 1 << " строки ";
 		cin >> str[i];
 	}
 	do
 	{
-		cout << "\n\nВыберите действиет\n1)Ввести новое значение для строк\n2)Вывести строки" << endl;
+		cout << "\n\nВыберите действие\n1)Ввести новое значение для строк\n2)Вывести строки" << endl;
 		cout << "3)Сравнить строки\n4)Преобразовать строку в double\n5)Преобразовать строку в Int" << endl;
 		cout << "6)Поиск символа в строке\n7)Поиск подстроки в строке\n8)Вывести символ из строки" << endl;
 		cout << "9)Конкатенация строк" << endl;
@@ -216,17 +223,17 @@ int main()
 			unsigned numString;
 			cout << "Для какой строки нужно поменять значение: ";
 			cin >> numString;
-				if (numString < sizeString)
+				if (numString < sizeString + 1 && numString > 0)
 				{
 					cout << "Введите значение" << endl;
-					cin >> str[numString];
+					cin >> str[numString - 1];
 				}
 			break;
 		}
 		case 2:
 		{
 			for (unsigned i = 0; i < sizeString; i++)
-				cout << i << " строка: " << str[i] << endl;
+				cout << i + 1 << " строка: " << str[i] << endl;
 			break;
 		}	
 		case 3:
@@ -237,9 +244,9 @@ int main()
 			cin >> lStringComparison;
 			cout << "Вторая строка №: ";
 			cin >> rStringComparison;
-			if (lStringComparison < sizeString && rStringComparison << sizeString)
+			if (lStringComparison < sizeString + 1 && rStringComparison < sizeString + 1 && lStringComparison > 0 && rStringComparison > 0)
 			{
-				if (str[lStringComparison] == str[rStringComparison])
+				if (str[lStringComparison - 1] == str[rStringComparison - 1])
 					cout << "Равны" << endl;
 				else
 					cout << "Не равны" << endl;
@@ -253,9 +260,9 @@ int main()
 			unsigned num;
 			cout << "Какую строку нужно преобразовать в double: ";
 			cin >> num;
-			if (num < sizeString)
+			if (num < sizeString + 1 && num > 0)
 			{
-				double numOfLine = str[num].StrToDouble();
+				double numOfLine = str[num - 1].StrToDouble();
 				if (numOfLine != NULL)
 					cout << numOfLine << endl;
 				else
@@ -271,9 +278,9 @@ int main()
 			unsigned num;
 			cout << "Какую строку нужно преобразовать в int: ";
 			cin >> num;
-			if (num < sizeString)
+			if (num < sizeString + 1 && num > 0)
 			{
-				int numOfLine = str[num].StrToInt();
+				int numOfLine = str[num - 1].StrToInt();
 				if (numOfLine != NULL)
 					cout << numOfLine << endl;
 				else
@@ -291,20 +298,20 @@ int main()
 			cin >> num;
 			cout << "Какой символ нужно искать: ";
 			cin >> searchChar;
-			if (num < sizeString)
-				str[num].SearchSymbol(searchChar);
+			if (num < sizeString + 1 && num > 0)
+				str[num - 1].SearchSymbol(searchChar);
 			break;
 		}
 		case 7:
 		{
 			unsigned num;
 			char searchChar[256];
-			cout << "В какой строке нужно искать символ: ";
+			cout << "В какой строке нужно искать строку: ";
 			cin >> num;
-			cout << "Какой символ нужно искать: ";
+			cout << "Какую строку нужно искать: ";
 			cin >> searchChar;
-			if (num < sizeString)
-				str[num].SearchSubstring(searchChar);
+			if (num < sizeString + 1 && num > 0)
+				str[num - 1].SearchSubstring(searchChar);
 			break;
 		}
 		case 8:
@@ -313,10 +320,12 @@ int main()
 			unsigned numLetter;
 			cout << "Введите номер строки: ";
 			cin >> numString;
-			cout << "Введите номер символа";
+			cout << "Введите номер символа: ";
 			cin >> numLetter;
-			if (numString < sizeString && numLetter < str[numString].get_size())
-				cout << "Символ = " << str[numString][numLetter] << endl;
+			if (numString < sizeString + 1 && numLetter < str[numString + 1].get_size() && numString > 0 && numLetter > 0)
+				cout << "Символ = " << str[numString - 1][numLetter - 1] << endl;
+			else
+				cout << "Введите корректные данные" << endl;
 			break;
 		}
 		case 9:
@@ -327,10 +336,10 @@ int main()
 			cin >> numStr;
 			cout << "Какую строку нужно добавить";
 			cin >> numSecStr;
-			if (numStr < sizeString && numSecStr < sizeString)
+			if (numStr < sizeString + 1 && numSecStr < sizeString + 1 && numStr > 0 && numSecStr > 0)
 			{
-				str[numStr] += str[numSecStr];
-				cout << "Новая строка: " << str[numStr];
+				str[numStr - 1] += str[numSecStr - 1];
+				cout << "Новая строка: " << str[numStr - 1];
 			}
 			else
 				cout << "Вы ввели не корректные данные" << endl;
