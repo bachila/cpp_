@@ -171,14 +171,16 @@ ostream& operator<< (ostream& os, const String& str)
 
 istream& operator>> (istream& is, String& str)
 {
+	is.clear();
 	char tempStr[256];
-	is >> tempStr;
+	is.getline(tempStr, 256);
 	str.size = strlen(tempStr) + 1;
 	if (str.str)
 		delete[] str.str;
 	str.str = new char[str.size];
 	strcpy_s(str.str, str.size, tempStr);
 	return is;
+
 }
 
 bool operator== (const String& str1, const String& str2)
@@ -194,12 +196,7 @@ int main()
 	setlocale(LC_ALL, "");
 
 	unsigned userNum;
-	unsigned sizeString;
-	do
-	{
-		cout << "Введите размер массива строк" << endl;
-		cin >> sizeString;
-	} while (!sizeString);
+	unsigned sizeString = 3;
 	String* str = new String[sizeString];
 	cout << "Введите значения для строк" << endl;
 	for (unsigned i = 0; i < sizeString; i++)
@@ -223,11 +220,11 @@ int main()
 			unsigned numString;
 			cout << "Для какой строки нужно поменять значение: ";
 			cin >> numString;
-				if (numString < sizeString + 1 && numString > 0)
-				{
-					cout << "Введите значение" << endl;
-					cin >> str[numString - 1];
-				}
+			if (numString < sizeString + 1 && numString > 0)
+			{
+				cout << "Введите значение" << endl;
+				cin >> str[numString - 1];
+			}
 			break;
 		}
 		case 2:
@@ -235,7 +232,7 @@ int main()
 			for (unsigned i = 0; i < sizeString; i++)
 				cout << i + 1 << " строка: " << str[i] << endl;
 			break;
-		}	
+		}
 		case 3:
 		{
 			unsigned lStringComparison, rStringComparison;
@@ -254,7 +251,7 @@ int main()
 			else
 				cout << "Введите корректный индекс" << endl;
 			break;
-		}		
+		}
 		case 4:
 		{
 			unsigned num;
@@ -272,7 +269,7 @@ int main()
 			else
 				cout << "Введите корректный индекс" << endl;
 			break;
-		}	
+		}
 		case 5:
 		{
 			unsigned num;
